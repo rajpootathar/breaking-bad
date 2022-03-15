@@ -1,61 +1,57 @@
-import * as React from 'react';
-import {View} from 'react-native';
-import {
-  VStack,
-  Input,
-  Button,
-  IconButton,
-  Icon,
-  Text,
-  NativeBaseProvider,
-  Center,
-  Box,
-  Divider,
-  Heading,
-} from 'native-base';
-import {Ionicons, MaterialIcons} from 'react-native-vector-icons';
+import React, {useEffect, useState} from 'react';
+import {VStack} from 'native-base';
+import {View, Text} from 'react-native';
 
-function SearchBar() {
-  return (
-    <VStack
-      my="4"
-      space={5}
-      w="100%"
-      maxW="300px"
-      divider={
-        <Box px="2">
-          <Divider />
-        </Box>
-      }>
-      <VStack w="100%" space={5} alignSelf="center">
-        <Heading fontSize="lg">Cupertino</Heading>
-        <Input
-          placeholder="Search"
-          variant="filled"
-          width="100%"
-          borderRadius="10"
-          py="1"
-          px="2"
-          borderWidth="0"
-          InputLeftElement={
-            <Icon
-              ml="2"
-              size="4"
-              color="gray.400"
-              as={<Ionicons name="ios-search" />}
-            />
-          }
-        />
-      </VStack>
-    </VStack>
-  );
-}
-
+import Header from '../../components/Header';
+import SearchBar from '../../components/SearchBar';
+import MasonryList from 'react-native-masonry-list';
+import CharactersService from '../../service/CharactersService';
+import Colors from '../../constants/colors';
 function HomeScreen() {
+  const [characters, setCharacters] = useState([]);
+
+  useEffect(() => {
+    CharactersService.find(res =>
+      setCharacters(
+        res.map(item => {
+          item.url = item.img;
+          return item;
+        }),
+      ),
+    );
+  }, []);
+
+  characters;
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <VStack px="3" height={'100%'} background={Colors.primary} pb="6">
+      <Header
+        title={
+          <Text style={{color: 'white', fontSize: 28, lineHeight: 35}}>
+            <Text
+              style={{fontSize: 32, backgroundColor: 'green', color: 'white'}}>
+              Br
+            </Text>
+            eaking{' '}
+            <Text
+              style={{fontSize: 32, backgroundColor: 'green', color: 'white'}}>
+              Ba
+            </Text>
+            d
+          </Text>
+        }
+      />
       <SearchBar />
-    </View>
+      <MasonryList
+        rerender={true}
+        backgroundColor={Colors.primary}
+        images={characters}
+        renderIndividualFooter={item => (
+          <View style={{marginBottom: 2, padding: 5}}>
+            <Text style={{color: 'white'}}>{item.name}</Text>
+          </View>
+        )}
+      />
+    </VStack>
   );
 }
 
