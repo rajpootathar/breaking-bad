@@ -7,8 +7,10 @@ import SearchBar from '../../components/SearchBar';
 import MasonryList from 'react-native-masonry-list';
 import CharactersService from '../../service/CharactersService';
 import Colors from '../../constants/colors';
+import {useNavigation} from '@react-navigation/native';
 function HomeScreen() {
   const [characters, setCharacters] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     CharactersService.find(res =>
@@ -42,6 +44,7 @@ function HomeScreen() {
       />
       <SearchBar />
       <MasonryList
+        onPressImage={character => navigation.navigate('Detail', {character})}
         rerender={true}
         backgroundColor={Colors.primary}
         images={characters}
