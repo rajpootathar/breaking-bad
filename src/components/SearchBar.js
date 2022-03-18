@@ -1,7 +1,14 @@
-import * as React from 'react';
+import React, {useState, useCallback} from 'react';
 import {VStack, Input, Icon, Box, Divider} from 'native-base';
 
-function SearchBar() {
+function SearchBar(props) {
+  const {searchFilterFunction} = props;
+  const [search, setSearch] = useState('');
+
+  const handleChange = text => {
+    setSearch(text);
+    searchFilterFunction(text);
+  };
   return (
     <VStack
       my="4"
@@ -21,6 +28,8 @@ function SearchBar() {
           py="3"
           px="2"
           borderWidth="0"
+          value={search}
+          onChangeText={text => handleChange(text)}
         />
       </VStack>
     </VStack>

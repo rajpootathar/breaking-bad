@@ -1,48 +1,63 @@
 import React, {useEffect, useState} from 'react';
-import {VStack} from 'native-base';
-import {Image, Text} from 'react-native';
+import {Image, Text, ImageBackground, View, StyleSheet} from 'react-native';
 
 import Header from '../../components/Header';
-import SearchBar from '../../components/SearchBar';
-import MasonryList from 'react-native-masonry-list';
-import CharactersService from '../../service/CharactersService';
-import Colors from '../../constants/colors';
+import ProfileAttribute from '../../components/ProfileAttribute';
 
 function DetailScreen({route}) {
   const character = route?.params?.character;
   console.log(character);
   return (
-    <VStack px="3" height={'100%'} background={Colors.primary} pb="6">
+    <ImageBackground
+      source={{uri: character.url}}
+      style={styles.imageBackground}>
+      <View style={styles.overlay}></View>
       <Header
         isIcon={true}
-        title={
-          <Text style={{color: 'white', fontSize: 28, lineHeight: 35}}>
-            <Text
-              style={{fontSize: 32, backgroundColor: 'green', color: 'white'}}>
-              Br
-            </Text>
-            eaking{' '}
-            <Text
-              style={{fontSize: 32, backgroundColor: 'green', color: 'white'}}>
-              Ba
-            </Text>
-            d
-          </Text>
-        }
+        title={<Text style={styles.name}>{character.name}</Text>}
       />
-      <VStack>
-        <Image
-          source={{uri: character.url}}
-          style={{
-            height: '60%',
-            width: '100%',
-            borderRadius: 10,
-          }}
-        />
-        <Text>{character.nickname}</Text>
-      </VStack>
-    </VStack>
+      <View style={styles.content}>
+        <Text style={styles.information}>Information</Text>
+        <View style={styles.attributeblock}>
+          <ProfileAttribute title={'NickName'} value={character.nickname} />
+          <ProfileAttribute title={'Occupation'} value={character.occupation} />
+          <ProfileAttribute title={'Portrayed'} value={character.portrayed} />
+          <ProfileAttribute title={'Birthday'} value={character.birthday} />
+        </View>
+      </View>
+    </ImageBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  imageBackground: {
+    height: '100%',
+    width: '100%',
+    borderRadius: 10,
+    justifyContent: 'space-between',
+  },
+  overlay: {
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    height: '100%',
+    width: '100%',
+    position: 'absolute',
+  },
+  name: {color: 'white', fontSize: 28, lineHeight: 35},
+  information: {fontSize: 24, textAlign: 'center', fontWeight: 'bold'},
+  content: {
+    paddingTop: 10,
+    paddingBottom: 20,
+    paddingHorizontal: 25,
+    backgroundColor: 'rgba(255,165,0,0.3)',
+    borderRadius: 25,
+    justifyContent: 'space-between',
+    height: '35%',
+  },
+  attributeblock: {
+    justifyContent: 'space-between',
+    height: '70%',
+    bottom: '3%',
+  },
+});
 
 export default DetailScreen;
